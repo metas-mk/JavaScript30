@@ -71,7 +71,7 @@
 
     function handleUpdate() {
       const suffix = this.dataset.sizing || ''; // select the elements with attributes called date-sizing
-      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix); // updateing the css style variables
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix); // updateing the css style variables. this.name is input name.
     }
 
     inputs.forEach(input => input.addEventListener('change', handleUpdate)); // listening on change events. only triggers at end position.
