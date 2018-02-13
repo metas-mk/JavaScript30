@@ -62,12 +62,34 @@
       background:black;
       position: absolute;
       top:50%;
+      transform-origin: 100%; /* moves the origin to the right. default origin is 50%*/
+      transform: rotate(90deg); /* rotates the element by 90° so it shows to 12h initially */
+      transition: all 0.05s; /* enables a transition animation */
+      transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275); /* enables a transition movement pattern */
     }
 
   </style>
-
   <script>
+    const secondHand = document.querySelector('.second-hand'); // grabbing the second hand html element
+    const minHand = document.querySelector('.min-hand'); // grabbing the minute hand html element
+    const hourHand = document.querySelector('.hour-hand'); // grabbing the hour hand html element
 
+    function setDate() {
+      const now = new Date();
+      const seconds = now.getSeconds(); // getting the seconds from date for our seconds hand
+      const secondsDegrees = ((seconds / 60) * 360) + 90; // translating seconds to degrees and offsetting the 90 degrees
+      secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+
+      const minutes = now.getMinutes(); // getting the seconds from date for our seconds hand
+      const minutesDegrees = ((minutes / 60) * 360) + 90; // translating seconds to degrees and offsetting the 90 degrees
+      minHand.style.transform = `rotate(${minutesDegrees}deg)`;
+
+      const hours = now.getHours(); // getting the seconds from date for our seconds hand
+      const hoursDegrees = ((hours / 12) * 360) + 90; // translating seconds to degrees and offsetting the 90 degrees
+      hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
+    }
+
+    setInterval(setDate, 1000);
 
   </script>
 </body>
