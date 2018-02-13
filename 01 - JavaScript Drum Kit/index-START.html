@@ -80,7 +80,7 @@
       this.classList.remove('playing'); // "this" is the key element it was called on. removes the playing css selector after transition
   }
 
-  const keys = document.querySelectorAll('.key'); // get all key elements on the page. returns an array of all keys
+  const keys = document.querySelectorAll('.key'); // get all key elements on the page. returns a node list (not an array) of all keys
   keys.forEach(key => key.addEventListener('transitionend', removeTransition)); //each key gets an eventlistener added to it
   window.addEventListener('keydown', playSound);
 

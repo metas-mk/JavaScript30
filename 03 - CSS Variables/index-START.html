@@ -8,6 +8,9 @@
   <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
 
   <div class="controls">
+    <!-- data-attributes are special properties that can be set/ defined individualy. just shall start with 'data-'. all the data-attributes
+      can be selected via this.dataset
+    -->
     <label for="spacing">Spacing:</label>
     <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
 
@@ -21,7 +24,26 @@
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
+    /* variables in css are defined with property notation beginning with '--'
+    */
+    :root {
+      --base: #ffc600;
+      --spacing: 10px;
+      --blur: 10px;
+    }
 
+    /* to use the variable then choose via var(--...)
+    */
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .hl {
+      color: var(--base);
+    }
+ 
     /*
       misc styles, nothing to do with CSS variables
     */
@@ -45,6 +67,15 @@
   </style>
 
   <script>
+    const inputs = document.querySelectorAll('.controls input'); // selects all inouts elements in class controls. returns a node list.
+
+    function handleUpdate() {
+      const suffix = this.dataset.sizing || ''; // select the elements with attributes called date-sizing
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix); // updateing the css style variables
+    }
+
+    inputs.forEach(input => input.addEventListener('change', handleUpdate)); // listening on change events. only triggers at end position.
+    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate)); // listening on mousemove. triggers laso during mouse movement.
   </script>
 
 </body>
