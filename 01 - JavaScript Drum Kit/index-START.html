@@ -58,6 +58,31 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  // key events
+  // playing audio
+  // css animation, transition
+
+  function playSound(e) {
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`); // e is the event objext. keyCode is the property of event that has the keycode of the pressed key
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`) // selects the pressed key element
+    if (!audio) return; // if no audio element found for the pressed key, then stop the function and return
+    audio.currentTime = 0; // rewinds the audio to beginning (see play comment below)
+    audio.play(); // plays the selected audio. calling play on an audio element thats already playing does not play it again.
+    key.classList.add('playing'); // adds the playing css class to the key element. important there is the transition style (animation) in key and the playing definition
+    // in jQuerey this would be key.addClass('playing')
+    // key.classList.remove('playing');
+    // key.classList.toggle('playing');
+
+  }
+
+  function removeTransition(e) {
+      if (e.propertyName != 'transform') return; // skip if it's not a transform
+      this.classList.remove('playing'); // "this" is the key element it was called on. removes the playing css selector after transition
+  }
+
+  const keys = document.querySelectorAll('.key'); // get all key elements on the page. returns an array of all keys
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition)); //each key gets an eventlistener added to it
+  window.addEventListener('keydown', playSound);
 
 </script>
 
