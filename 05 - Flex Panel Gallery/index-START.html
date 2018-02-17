@@ -21,11 +21,14 @@
       box-sizing: inherit;
     }
 
+    /* flex container */
     .panels {
       min-height:100vh;
       overflow: hidden;
+      display: flex; /* this will move the panels from stacked to side-by-side each panel just taking the space needed*/
     }
 
+    /* flex item of panel + flex container */
     .panel {
       background:#6B0F9C;
       box-shadow:inset 0 0 0 5px rgba(255,255,255,0.1);
@@ -34,6 +37,7 @@
       align-items:center;
       /* Safari transitionend event.propertyName === flex */
       /* Chrome + FF transitionend event.propertyName === flex-grow */
+      /* the transition is responsible for the movement/ animation */
       transition:
         font-size 0.7s cubic-bezier(0.61,-0.19, 0.7,-0.11),
         flex 0.7s cubic-bezier(0.61,-0.19, 0.7,-0.11),
@@ -41,6 +45,11 @@
       font-size: 20px;
       background-size:cover;
       background-position:center;
+      flex: 1; /* each panel will evenly distribute space among each other */
+      justify-content: center; /* centering the content horizontally */
+      align-items: center; /* aligning content vertically centered together with following display: flex*/
+      display: flex; /* flex container. content left to right */
+      flex-direction: column; /* stacks content top to bottom */
     }
 
 
@@ -50,11 +59,23 @@
     .panel4 { background-image:url(https://source.unsplash.com/ITjiVXcwVng/1500x1500); }
     .panel5 { background-image:url(https://source.unsplash.com/3MNzGlQM7qs/1500x1500); }
 
+    /* flex item/ children */
     .panel > * {
       margin:0;
       width: 100%;
       transition:transform 0.5s;
+      /* border: 1px solid red; /* just for better seeing the content elements during development*/
+      flex: 1 0 auto; /* distribute content evenly vertically */
+      display: flex;
+      justify-content: center; /* centering the content horizontally */
+      align-items: center; /* aligning content vertically centered */
     }
+
+    /* movement transition of top and bottom conent */
+    .panel > *:first-child { transform: translateY(-100%)}
+    .panel.open-active > *:first-child { transform: translateY(0%)}
+    .panel > *:last-child { transform: translateY(100%)}
+    .panel.open-active > *:last-child { transform: translateY(0%)}
 
     .panel p {
       text-transform: uppercase;
@@ -66,7 +87,9 @@
       font-size: 4em;
     }
 
+    /* class open leads to bigger content */
     .panel.open {
+      flex: 5; /* evenly distributed overwrite by taking 5 times as much of room */
       font-size:40px;
     }
 
@@ -102,6 +125,24 @@
   </div>
 
   <script>
+    // get nodelist of all panels
+    const panels = document.querySelectorAll('.panel');
+
+    function toggleOpen() {
+      this.classList.toggle('open');
+    }
+
+    function toggleActive(e) {
+      if (e.propertyName.includes('flex')) {
+        this.classList.toggle('open-active');
+      }
+    }
+
+    // loop over all panels
+    // add an event listener to them, listening on click event
+    // if clicked then run the toggleOpen() function
+    panels.forEach(panel => panel.addEventListener('click', toggleOpen));
+    panels.forEach(panel => panel.addEventListener('transitionend', toggleActive));
 
   </script>
 
