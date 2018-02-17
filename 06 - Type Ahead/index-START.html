@@ -17,6 +17,48 @@
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
+// creating an empty array
+const cities = [];
+
+// fetch function does not return the data, it returns a promise
+const prom = fetch(endpoint)
+              .then(blob => blob.json()) // returns another promise
+              .then(data => cities.push(...data)); // spreading data into cities array
+
+// taking a string to match and the cities array that shall be filtered
+function findMatches(wordToMatch, cities) {
+  return cities.filter(place => { // place is a json city object item
+    // here we shall figure out if the city or state matches what was searched
+    const regex = new RegExp(wordToMatch, 'gi'); // g = global, entire string, i = insensitive
+    return place.city.match(regex) || place.state.match(regex);
+  });
+}
+
+// function to put in commas in population number
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function displayMatches() {
+  const matchArray = findMatches(this.value, cities);
+  const html = matchArray.map(place => {
+    const regex = new RegExp(this.value, 'gi');
+    const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
+    const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
+    return `
+      <li>
+        <span class="name">${cityName}, ${stateName}</span>
+        <span class="population">${numberWithCommas(place.population)}</span>
+    `;
+  }).join(''); // map returns an array. join put all together and returns a string
+  suggestions.innerHTML = html;
+}
+
+const searchInput = document.querySelector('.search');
+const suggestions = document.querySelector('.suggestions');
+
+searchInput.addEventListener('change', displayMatches);
+searchInput.addEventListener('keyup', displayMatches);
 </script>
   </body>
 </html>
